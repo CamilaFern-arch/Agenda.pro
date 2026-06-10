@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌺Sweet Life - Agenda Digital Coqueta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            background-color: transparent;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            color: #6e5a51;
+        }
+
+        .agenda-card {
+            background-color: #fbf8f5; /* Crema pastel suave */
+            padding: 25px;
+            border-radius: 30px;
+            width: 360px;
+            box-shadow: 0 10px 30px rgba(180, 160, 150, 0.08);
+            box-sizing: border-box;
+        }
+
+        /* Encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2.8rem;
+            font-style: italic;
+            color: #d4a396; /* Rosa pastel */
+            margin: 0;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #c2b0a7;
+            margin-top: 5px;
+        }
+
+        /* BARRA MÁGICA DE PORCENTAJE SEMANALES */
+        .progress-container {
+            background-color: #fff;
+            border: 1px solid #f2dbd5;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #b57c70;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+
+        .progress-bar-bg {
+            background-color: #f5eae4; /* Color degradado apagado */
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #f2dbd5, #e8b4a6); /* Degradado femenino */
+            width: 0%;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* MENÚ DE PESTAÑAS KAWAII */
+        .tabs-menu {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            scrollbar-width: none; /* Ocultar barra en Firefox */
+        }
+        .tabs-menu::-webkit-scrollbar { display: none; } /* Ocultar en Chrome/Safari */
+
+        .tab-btn {
+            background-color: #fff;
+            border: 1px solid #fbfaf8;
+            padding: 8px 14px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #a89489;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background-color: #e8b4a6; /* Rosa fuerte pastel activo */
+            color: #fff;
+            border-color: #e8b4a6;
+            font-weight: 600;
+        }
+
+        /* CONTENIDO DE LAS PESTAÑAS */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* LISTAS DE PRODUCTIVIDAD (PUNTOS DEGRADADOS) */
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border: 1px solid #fbfaf8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .todo-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* El punto estético que se degrada o se enciende */
+        .dot-check {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #f5eae4; /* Estado apagado/degradado suave */
+            border: 2px solid #eee1da;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .todo-item.checked .dot-check {
+            background-color: #e8b4a6; /* Estado completado/vivo */
+            border-color: #d4a396;
+            box-shadow: 0 0 8px rgba(232, 180, 166, 0.4);
+        }
+
+        .todo-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6e5a51;
+            transition: all 0.2s ease;
+        }
+
+        .todo-item.checked .todo-text {
+            color: #c2b0a7;
+            text-decoration: line-through;
+        }
+
+        .tag {
+            font-size: 0.6rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tag-pink { background-color: #f2dbd5; color: #b57c70; }
+    </style>
+</head>
+<body>
+
+    <div class="agenda-card">
+        <div class="header">
+            <h1 class="title">sweet life</h1>
+            <div class="subtitle">Mi Agenda Semanal</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Progreso de la semana</span>
+                <span id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="tabs-menu">
+            <button class="tab-btn active" onclick="switchTab('planificador')">✨ Plan</button>
+            <button class="tab-btn" onclick="switchTab('finanzas')">💸 Finanzas</button>
+            <button class="tab-btn" onclick="switchTab('habitos')">🌸 Hábitos</button>
+            <button class="tab-btn" onclick="switchTab('menu')">🍲 Menú</button>
+            <button class="tab-btn" onclick="switchTab('hogar')">🏠 Hogar</button>
+        </div>
+
+        <div id="planificador" class="tab-content active">
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Planificar los objetivos de la semana</span></div>
+                <span class="tag tag-pink">Prioridad</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Revisar correos y mensajes pendientes</span></div>
+                <span class="tag tag-pink">Rutina</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Organizar agenda de citas</span></div>
+                <span class="tag tag-pink">Idea</span>
+            </div>
+        </div>
+
+        <div id="finanzas" class="tab-content">
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Registrar los gastos fijos del mes</span></div>
+                <span class="tag tag-pink">Ahorro</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Revisar presupuesto semanal libre</span></div>
+                <span class="tag tag-pink">Control</span>
+            </div>
+        </div>
+
+        <div id="habitos" class="tab-content">
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Beber 2 litros de agua diarios</span></div>
+                <span class="tag tag-pink">Salud</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Hacer 30 min de meditación o ejercicio</span></div>
+                <span class="tag tag-pink">Mente</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Skincare de mañana y noche</span></div>
+                <span class="tag tag-pink">Amor propio</span>
+            </div>
+        </div>
+
+        <div id="menu" class="tab-content">
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Planificar comidas (Lunes a Domingo)</span></div>
+                <span class="tag tag-pink">Cocina</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Hacer la lista del supermercado</span></div>
+                <span class="tag tag-pink">Compras</span>
+            </div>
+        </div>
+
+        <div id="hogar" class="tab-content">
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Cambiar sábanas y toallas limpias</span></div>
+                <span class="tag tag-pink">Limpieza</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Organizar el armario (Método Marie Kondo)</span></div>
+                <span class="tag tag-pink">Orden</span>
+            </div>
+            <div class="todo-item" onclick="toggleTask(this)">
+                <div class="todo-left"><div class="dot-check"></div><span class="todo-text">Regar las plantas de la casa</span></div>
+                <span class="tag tag-pink">Plantitas</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Cambiar entre las pestañas de la agenda
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Marcar/Desmarcar tareas y refrescar el porcentaje global
+        function toggleTask(element) {
+            element.classList.toggle('checked');
+            updateGlobalProgress();
+        }
+
+        // Calcular el progreso total sumando todas las pestañas juntas
+        function updateGlobalProgress() {
+            const totalTasks = document.querySelectorAll('.todo-item').length;
+            const checkedTasks = document.querySelectorAll('.todo-item.checked').length;
+            
+            const percentage = totalTasks > 0 ? Math.round((checkedTasks / totalTasks) * 100) : 0;
+            
+            document.getElementById('progress-percentage').textContent = `${percentage}%`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+        }
+
+        // Iniciar la barra en cero al cargar
+        updateGlobalProgress();
+    </script>
+</body>
+</html>
